@@ -1,8 +1,11 @@
-#----------------------------------------------------------------------------------------------------------------Modulos
+# ----------------------------------------------------------------------------------------------------------------Modulos
 import datetime
+
 hoje = datetime.date.today()
 import csv
-#----------------------------------------------------------------------------------------------------------------classes
+
+
+# ----------------------------------------------------------------------------------------------------------------classes
 class Pessoa():
     def __init__(self, nome, idade, peso, altura, sexo, meta_peso):
         self.nome = nome
@@ -11,8 +14,9 @@ class Pessoa():
         self.altura = altura
         self.sexo = sexo
         self.meta_peso = meta_peso
+
     def imc_pessoa(self):
-        imc = (self.peso/self.altura)/2
+        imc = (self.peso / self.altura) / 2
         status = ""
         if imc < 18.5:
             status = "ABAIXO DO PESO"
@@ -29,56 +33,52 @@ class Pessoa():
             return imc, status
 
     def peso_ideal(self):
-            imc = self.imc_pessoa()
-            p = self.altura * self.altura
-            pi = imc * p
-            return pi
-
-def novas_medidas():
-    class Captador_medidas():
-        def __init__(self, bicepes_d, bicepes_e, perna_d, perna_e, abdomen):
-            self.bicepes_d = bicepes_d
-            self.bicepes_e = bicepes_e
-            self.perna_d = perna_d
-            self.perna_e = perna_e
-            self.abdomen = abdomen
-
-        def salva_dados_medidas(self):
-
-            with open(f"{hoje}.csv",  "w") as Medidas:
-                cabecalho = ["Bicepes Direito", "Bicepes Esquerdo", "Perna Direita", "Perna Esquerda ","Abdomen"]
-                escrever = csv.DictWriter(Medidas, cabecalho)
-                escrever.writeheader()
-                lista_nome_arquivos_medidas.append(hoje)
-                escrever.writerow({"Bicepes Esquerdo": self.bicepes_e,
-                                   "Bicepes Direito": self.bicepes_d,
-                                   "Perna Esquerda": self.perna_d,
-                                   "Perna Direita": self.perna_e,
-                                   "Abdomen": self.abdomen})
+        imc = self.imc_pessoa()
+        p = self.altura * self.altura
+        pi = imc * p
+        return pi
 
 
+class Captador_medidas():
+    def __init__(self, nome, bicepes_d, bicepes_e, perna_d, perna_e, abdomen):
+        self.nome = nome
+        self.bicepes_d = bicepes_d
+        self.bicepes_e = bicepes_e
+        self.perna_d = perna_d
+        self.perna_e = perna_e
+        self.abdomen = abdomen
 
-#___________________________________________________________________________________________________________________POO
+    def salva_dados_medidas(self):
+        with open(f"{hoje} {nome}.csv", "w") as Medidas:
+            cabecalho = ["Bicepes Direito", "Bicepes Esquerdo", "Perna Direita", "Perna Esquerda ", "Abdomen"]
+            escrever = csv.DictWriter(Medidas, cabecalho)
+            escrever.writeheader()
+            lista_nome_arquivos_medidas.append(hoje)
+            escrever.writerow({"Bicepes Esquerdo": self.bicepes_e})
+            escrever.writerow({"Bicepes Direito": self.bicepes_d})
+            escrever.writerow({"Perna Esquerda": self.perna_d})
+            escrever.writerow({"Perna Direita": self.perna_e})
+            escrever.writerow({"Abdomen": self.abdomen})
 
-#--------------------------------------------------------------------------------------------------------------Colecoes
+
+# ___________________________________________________________________________________________________________________POO
+
+# --------------------------------------------------------------------------------------------------------------Colecoes
 lista_nome_arquivos_medidas = []
 
 
-
-
-
-#--------------------------------------------------------------------------------------------------------------Funcoes
-def parametros_medidas(b_d,b_e,p_d,p_e,abd):
+# --------------------------------------------------------------------------------------------------------------Funcoes
+def parametros_medidas():
+    nome = str(input("Nome do competidor:"))
     b_d = float(input("Medida Braco direito:"))
     b_e = float(input("Medida Braco esquerdo:"))
     p_d = float(input("Medida Perna direira"))
     p_e = float(input("Mediada Pena esquerda"))
     abd = float(input("Medida Abdomen:"))
-    return  b_d,b_e,p_d,p_e,abd
+    return nome, b_d, b_e, p_d, p_e, abd
 
 
-
-def usuario(nome, idade, peso, altura, sexo,meta):
+def usuario(nome, idade, peso, altura, sexo, meta):
     nome = str(input("Nome:"))
     idade = int(input("Idade:"))
     peso = float(input("Peso:"))
@@ -90,31 +90,27 @@ def usuario(nome, idade, peso, altura, sexo,meta):
     return nome, idade, peso, altura, sexo, meta
 
 
-def menu ():
+def menu():
     while True:
-        print(25*"=", "MENU", "="*25)
+        print(25 * "=", "MENU", "=" * 25)
         print("""
             [1] Atualizar medidadas
             [2] Relatar pontuacao
             [3] Ranking
-        
+
          """)
 
         choice = int(input(" => :"))
         return choice
 
 
-
-
-
-
 escolha = 0
 while escolha == 0:
     escolha = menu()
 
-#-------------------------------------------------------------------------------------------- Botao  1
-    while escolha == 1 :
-        print(25*"=", "ATUALIZAR MEDIDAS")
+    # -------------------------------------------------------------------------------------------- Botao  1
+    while escolha == 1:
+        print(25 * "=", "ATUALIZAR MEDIDAS")
         print("""
         [1] Atualizar Medidas de todos os competidores 
         [2] Atualizar  do competidor individual 
@@ -122,24 +118,27 @@ while escolha == 0:
         """)
         choice_atulizar = int(input(" => :"))
         if choice_atulizar == 1:
-            print(25*"=", "ATULIZA MEDIDA DE TODOS COMPETIDORES:", "="*25)
+            print(25 * "=", "ATULIZA MEDIDA DE TODOS COMPETIDORES:", "=" * 25)
             """
             * - abrir funcao que capta  dados 
             * - salvar dados atulizado 
              """
-            novas_medidas()
+        nome, b_d, b_e, p_d, p_e, abd = parametros_medidas()
+        aw = Captador_medidas(nome, b_d, b_e, p_d, p_e, abd).salva_dados_medidas()
 
+        nome, b_d, b_e, p_d, p_e, abd = parametros_medidas()
+        bw = Captador_medidas(nome, b_d, b_e, p_d, p_e, abd).salva_dados_medidas()
 
-
-
+        nome, b_d, b_e, p_d, p_e, abd = parametros_medidas()
+        cw = Captador_medidas(nome, b_d, b_e, p_d, p_e, abd).salva_dados_medidas()
         if choice_atulizar == 2:
-                """
-                       * - Mostrar  qual usuario eu desjo altualizar medidada
-                       * - acessar lista com os nomes dos arquvo do usario escolhido
-                       * - abrir a ultima medida e subescrevela
-                       * - abrir funcao que capta  dados 
-                       * - salvar dados atulizado 
-                       """
+            """
+                   * - Mostrar  qual usuario eu desjo altualizar medidada
+                   * - acessar lista com os nomes dos arquvo do usario escolhido
+                   * - abrir a ultima medida e subescrevela
+                   * - abrir funcao que capta  dados 
+                   * - salvar dados atulizado 
+                   """
         if choice_atulizar == 3:
             print(25 * "=", "ATULIZAR COMPETIDOR:", "=" * 25)
             """
@@ -152,17 +151,17 @@ while escolha == 0:
         if choice_atulizar == 0:
             escolha = 0
 
-#______________________________________________________________________________________ Botao2
+    # ______________________________________________________________________________________ Botao2
     while escolha == 2:
         print(25 * "=", "ATULIZAR COMPETIDOR:", "=" * 25)
         """
         * - abrir lista com o nome da ultima atulizacao que teve 
         * - Abrir funcao que capt criterios a de pontuacao
         * - salvar no 
-        
+
         """
-#_______________________________________________________________________________________Botao3
-    while escolha == 3 :
+    # _______________________________________________________________________________________Botao3
+    while escolha == 3:
         print(25 * "=", " Ranking", "=" * 25)
         """
         * - juntar todos os arquivos diarios de  cada competior 
